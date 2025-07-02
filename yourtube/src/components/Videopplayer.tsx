@@ -23,7 +23,8 @@ export default function VideoPlayer({ video }: VideoPlayerProps) {
         poster={`/placeholder.svg?height=480&width=854`}
       >
         <source
-          src={`${process.env.BACKEND_URL}/${video?.filepath}`}
+          src={videos}
+
           type="video/mp4"
         />
         Your browser does not support the video tag.
