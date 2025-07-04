@@ -14,6 +14,7 @@ export default function VideoPlayer({ video }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const videos = "/video/vdo.mp4";
 
+
   return (
     <div className="aspect-video bg-black rounded-lg overflow-hidden">
       <video
@@ -22,11 +23,8 @@ export default function VideoPlayer({ video }: VideoPlayerProps) {
         controls
         poster={`/placeholder.svg?height=480&width=854`}
       >
-        <source
-          src={videos}
+       <source src="/video/video-720p.mp4" type="video/mp4" />
 
-          type="video/mp4"
-        />
         Your browser does not support the video tag.
       </video>
     </div>

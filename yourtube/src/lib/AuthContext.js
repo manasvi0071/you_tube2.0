@@ -9,6 +9,7 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const login = (userdata) => {
     setUser(userdata);
@@ -24,7 +25,10 @@ export const UserProvider = ({ children }) => {
     }
   };
   const handlegooglesignin = async () => {
+     if (loading) return; // prevent multiple clicks
+     setLoading(true);
     try {
+      console.log("Button clicked, attempting Google Sign-In popup...");
       const result = await signInWithPopup(auth, provider);
       const firebaseuser = result.user;
       const payload = {
@@ -35,8 +39,15 @@ export const UserProvider = ({ children }) => {
       const response = await axiosInstance.post("/user/login", payload);
       login(response.data.result);
     } catch (error) {
-      console.error(error);
+       if (error.code === "auth/popup-closed-by-user") {
+      console.warn("User closed the popup without signing in.");
+      // Optionally show a toast or message here
+    } else {
+      console.error("Google Sign-In error:",error);
     }
+  }finally {
+    setLoading(false); // always reset
+  }
   };
   useEffect(() => {
     const unsubcribe = onAuthStateChanged(auth, async (firebaseuser) => {
@@ -59,7 +70,7 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, login, logout, handlegooglesignin }}>
+    <UserContext.Provider value={{ user, login, logout, handlegooglesignin, loading }}>
       {children}
     </UserContext.Provider>
   );
