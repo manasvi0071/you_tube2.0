@@ -77,7 +77,7 @@ export default function HistoryContent() {
       </div>
     );
   }
-  const videos = "/video/vdo.mp4";
+  const videos = "/video/video-720p.mp4";
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
