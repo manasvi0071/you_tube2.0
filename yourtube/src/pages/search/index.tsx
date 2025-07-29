@@ -16,7 +16,7 @@ const index = () => {
           </div>
         )}
         <Suspense fallback={<div>Loading search results...</div>}>
-          <SearchResult query={q || ""} />
+          <SearchResult query={Array.isArray(q) ? q.join(" ") : (q ?? "")} />
         </Suspense>
       </div>
     </div>
