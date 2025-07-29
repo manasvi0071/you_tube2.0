@@ -12,9 +12,11 @@ const firebaseConfig = {
 };
 
 // ✅ Prevent re-initializing Firebase
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+const app =
+  getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+provider.setCustomParameters({ display: "popup" });
 
 export { auth, provider };
