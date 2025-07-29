@@ -14,35 +14,40 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Channeldialogue from "./channeldialogue";
 import { useRouter } from "next/router";
 import { useUser } from "@/lib/AuthContext";
+import MobileDrawer from "./MobileDrawer"; // ✅ already present
 
 const Header = () => {
   const { user, logout, handlegooglesignin } = useUser();
-  // const user: any = {
-  //   id: "1",
-  //   name: "John Doe",
-  //   email: "john@example.com",
-  //   image: "https://github.com/shadcn.png?height=32&width=32",
-  // };
   const [searchQuery, setSearchQuery] = useState("");
   const [isdialogeopen, setisdialogeopen] = useState(false);
   const router = useRouter();
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
+
   const handleKeypress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       handleSearch(e as any);
     }
   };
+
   return (
     <header className="flex items-center justify-between px-4 py-2 bg-white border-b">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon">
+        {/* ✅ Show MobileDrawer trigger on small screens only */}
+        <div className="md:hidden">
+          <MobileDrawer />
+        </div>
+
+        {/* Show Sidebar toggle icon for desktop */}
+        <Button variant="ghost" size="icon" className="hidden md:inline-flex">
           <Menu className="w-6 h-6" />
         </Button>
+
         <Link href="/" className="flex items-center gap-1">
           <div className="bg-red-600 p-1 rounded">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
@@ -53,6 +58,8 @@ const Header = () => {
           <span className="text-xs text-gray-400 ml-1">IN</span>
         </Link>
       </div>
+
+      {/* Search */}
       <form
         onSubmit={handleSearch}
         className="flex items-center gap-2 flex-1 max-w-2xl mx-4"
@@ -64,7 +71,7 @@ const Header = () => {
             value={searchQuery}
             onKeyPress={handleKeypress}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="rounded-l-full border-r-0 focus-visible:ring-0"
+            className="rounded-l-full border-r-0 focus-visible:ring-0 text-black placeholder-gray-500"
           />
           <Button
             type="submit"
@@ -77,6 +84,8 @@ const Header = () => {
           <Mic className="w-5 h-5" />
         </Button>
       </form>
+
+      {/* User Auth / Actions */}
       <div className="flex items-center gap-2">
         {user ? (
           <>
@@ -130,17 +139,16 @@ const Header = () => {
             </DropdownMenu>
           </>
         ) : (
-          <>
-            <Button
-              className="flex items-center gap-2"
-              onClick={handlegooglesignin}
-            >
-              <User className="w-4 h-4" />
-              Sign in
-            </Button>
-          </>
-        )}{" "}
+          <Button
+            className="flex items-center gap-2"
+            onClick={handlegooglesignin}
+          >
+            <User className="w-4 h-4" />
+            Sign in
+          </Button>
+        )}
       </div>
+
       <Channeldialogue
         isopen={isdialogeopen}
         onclose={() => setisdialogeopen(false)}

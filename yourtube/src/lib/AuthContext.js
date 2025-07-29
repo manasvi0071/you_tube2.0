@@ -28,7 +28,16 @@ export const UserProvider = ({ children }) => {
     if (loading) return;
     setLoading(true);
     try {
+      // Check if the current domain is authorized before trying popup
+      const currentDomain = window.location.hostname;
+      const allowedDomains = ["localhost", "127.0.0.1", "you-tube2-0-beta.vercel.app", "your-custom-domain.com"];
+      
+      if (!allowedDomains.includes(currentDomain)) {
+        throw new Error(`Unauthorized domain: ${currentDomain}`);
+      }
+
       const result = await signInWithPopup(auth, provider);
+      console.log("Firebase User:", result.user);
       const firebaseuser = result.user;
 
       const payload = {
@@ -36,6 +45,7 @@ export const UserProvider = ({ children }) => {
         name: firebaseuser.displayName,
         image: firebaseuser.photoURL || "https://github.com/shadcn.png",
       };
+      console.log("Sending payload to backend:", payload);
 
       const response = await axiosInstance.post("/user/login", payload);
       login(response.data.result);
@@ -43,16 +53,17 @@ export const UserProvider = ({ children }) => {
       if (error.code === "auth/popup-closed-by-user") {
         console.warn("User closed popup before signing in.");
       } else {
-        console.error("Google Sign-In error:", error);
+        console.error("Google Sign-In error:", error.message || error);
+        alert(`Error: ${error.message || error}`);
       }
     } finally {
-      setLoading(false);
+      setLoading(true);
     }
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseuser) => {
-      if (firebaseuser) {
+      if (firebaseuser && !user) {
         try {
           const payload = {
             email: firebaseuser.email,

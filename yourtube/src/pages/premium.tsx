@@ -25,7 +25,7 @@ const PremiumPage = () => {
     }
 
     const options = {
-      key: "rzp_test_1234567890abcdef", // 🔁 Replace with your actual test key
+      key: "rzp_test_5vTec3yEKpRIpS", // 🔁 Replace with your actual test key
       amount: 5000, // ₹50 in paise
       currency: "INR",
       name: "YourTube Premium",
