@@ -30,8 +30,14 @@ export const UserProvider = ({ children }) => {
     try {
       // Check if the current domain is authorized before trying popup
       const currentDomain = window.location.hostname;
-      const allowedDomains = ["localhost", "127.0.0.1", "you-tube2-0-beta.vercel.app", "your-custom-domain.com"];
-      
+      const allowedDomains = [
+        "localhost",
+        "127.0.0.1",
+        "you-tube2-0-beta.vercel.app",
+        "you-tube20clone-manasvis-projects-416f3b75.vercel.app",
+        "your-custom-domain.com",
+      ];
+
       if (!allowedDomains.includes(currentDomain)) {
         throw new Error(`Unauthorized domain: ${currentDomain}`);
       }
@@ -83,7 +89,9 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, login, logout, handlegooglesignin, loading }}>
+    <UserContext.Provider
+      value={{ user, login, logout, handlegooglesignin, loading }}
+    >
       {children}
     </UserContext.Provider>
   );
