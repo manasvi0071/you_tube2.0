@@ -4,12 +4,13 @@ import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import { ThemeProvider } from "next-themes";
 import { UserProvider } from "@/lib/AuthContext";
+import { HMSProvider } from "@/Context/HMSContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <UserProvider>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <div className="bg-black text-white min-h-screen">
+        <div className="bg-white text-black min-h-screen">
           <Header />
           <div className="flex flex-col md:flex-row">
             {/* Sidebar only visible on md+ screens */}

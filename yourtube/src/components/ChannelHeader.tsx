@@ -24,7 +24,7 @@ const ChannelHeader = ({ channel, user }: any) => {
               <span>@{channel?.channelname.toLowerCase().replace(/\s+/g, "")}</span>
             </div>
             {channel?.description && (
-              <p className="text-sm text-gray-700 max-w-2xl">
+              <p className="text-sm text-black-700 max-w-2xl">
                 {channel?.description}
               </p>
             )}
@@ -36,7 +36,7 @@ const ChannelHeader = ({ channel, user }: any) => {
                 onClick={() => setIsSubscribed(!isSubscribed)}
                 variant={isSubscribed ? "outline" : "default"}
                 className={
-                  isSubscribed ? "bg-gray-100" : "bg-red-600 hover:bg-red-700"
+                  isSubscribed ? "bg-green-100" : "bg-red-600 hover:bg-red-700"
                 }
               >
                 {isSubscribed ? "Subscribed" : "Subscribe"}

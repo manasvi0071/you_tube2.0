@@ -85,9 +85,12 @@ export default function HistoryContent() {
       </div>
 
       <div className="space-y-4">
-        {history.map((item) => (
-          <div key={item._id} className="flex gap-4 group">
-            <Link href={`/watch/${item.videoid._id}`} className="flex-shrink-0">
+        {history
+        .filter((item) => item && item.videoid && item.videoid._id)
+        .map((item) => (
+        <div key={item._id} className="flex gap-4 group">
+          <Link href={`/watch/${item.videoid._id}`} className="flex-shrink-0">
+
               <div className="relative w-40 aspect-video bg-gray-100 rounded overflow-hidden">
                 <video
                   src={`${process.env.BACKEND_URL}/${item.videoid?.filepath}`}

@@ -188,7 +188,7 @@ const Comments = ({ videoId }: any) => {
 
       <div className="space-y-4">
         {comments.length === 0 ? (
-          <p className="text-sm text-gray-500 italic">No comments yet. Be the first to comment!</p>
+          <p className="text-sm text-black-500 italic">No comments yet. Be the first to comment!</p>
         ) : (
           comments.map((comment) => (
             <div key={comment._id} className="flex gap-4">

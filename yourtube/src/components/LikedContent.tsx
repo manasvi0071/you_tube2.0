@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import { MoreVertical, X, ThumbsUp, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -31,8 +30,18 @@ export default function LikedVideosContent() {
 
     try {
       const likedData = await axiosInstance.get(`/like/${user?._id}`);
+      const safeData = Array.isArray(likedData.data)
+        ? likedData.data.filter(
+            (item) =>
+              item &&
+              item._id &&
+              item.videoid &&
+              item.videoid._id &&
+              item.videoid.videotitle
+          )
+        : [];
 
-      setLikedVideos(likedData.data);
+      setLikedVideos(safeData);
     } catch (error) {
       console.error("Error loading liked videos:", error);
     } finally {
@@ -45,7 +54,9 @@ export default function LikedVideosContent() {
 
     try {
       console.log("Unliking video:", videoId, "for user:", user.id);
-      setLikedVideos(likedVideos.filter((item) => item._id !== likedVideoId));
+      setLikedVideos((prev) =>
+        prev.filter((item) => item._id !== likedVideoId)
+      );
     } catch (error) {
       console.error("Error unliking video:", error);
     }
@@ -76,7 +87,9 @@ export default function LikedVideosContent() {
       </div>
     );
   }
+
   const videos = "/video/video-720p.mp4";
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -109,7 +122,7 @@ export default function LikedVideosContent() {
                 {item.videoid.videochanel}
               </p>
               <p className="text-sm text-gray-600">
-                {item.videoid.views.toLocaleString()} views •{" "}
+                {item.videoid.views?.toLocaleString?.()} views •{" "}
                 {formatDistanceToNow(new Date(item.videoid.createdAt))} ago
               </p>
               <p className="text-xs text-gray-500 mt-1">
